@@ -1,0 +1,199 @@
+---
+title: "COVID-19"
+author: "Ekarin Eric Pongpipat, M.A."
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+    theme: lumen
+    vertical_layout: scroll
+---
+
+```{r setup, include=FALSE}
+#runtime: shiny
+knitr::opts_chunk$set(out.width = '100%', out.height = '100%')
+packages <- c("tidyverse", "covid19us", "tidyselect", "plotly", "TTR", "glue")
+xfun::pkg_attach2(packages, message = F)
+options(scipen=999)
+```
+
+```{r data}
+df <- read.csv(glue("data/data.csv")) %>%
+  as_tibble() %>%
+  mutate(date = as.Date(date))
+```
+
+```{r viz}
+viz <- function(data, regions = 'all', metrics,
+                smooth_value = TRUE,
+                proportion_value = TRUE) {
+  
+  if (regions == 'all') {
+    df_fig <- data
+  } else {
+    df_fig <- data %>%
+      filter(region %in% regions)
+  }
+  
+  df_fig <- df_fig %>%
+    filter(
+      metric %in% metrics,
+      smooth == smooth_value,
+      proportion == proportion_value
+    )
+  
+  #print(region_end)
+  
+  fig <- ggplot(df_fig, aes(date, value, color = region)) +
+    geom_line() +
+    labs(x = "\nDate",
+         color = "Region") + 
+    theme_minimal() #+
+    #scale_y_continuous(sec.axis = sec_axis(~ ., breaks = region_end))
+
+  
+  if (proportion_value == FALSE) {
+    fig <- fig +
+      labs(y = "No. of People\n")
+  } else {
+    fig <- fig +
+      labs(y = "% of Respective Population\n") +
+      scale_y_continuous(labels = scales::percent)
+  }
+  return(fig)
+  
+}
+```
+
+Summary
+====
+
+Row
+----
+
+### Daily Hospitalizations (Frequency)
+
+```{r}
+viz(df, 'all', "daily_total_hospitalizations", T, F)
+```
+
+### Daily Hospitalizations (Proportion)
+
+```{r}
+viz(df, 'all', "daily_total_hospitalizations", T, T)
+```
+
+Row
+----
+
+### Daily Deaths (Frequency)
+
+```{r}
+viz(df, 'all', "daily_deaths", T, F)
+```
+
+### Daily Deaths (Proportion)
+
+```{r}
+viz(df, 'all', "daily_deaths", T, T)
+```
+
+U.S.
+====
+
+Row
+----
+
+### Daily Hospitalizations (Frequency)
+
+```{r}
+viz(df, c('CA', 'TX', 'LA County', 'Dallas County'), "daily_total_hospitalizations", T, F)
+```
+
+### Daily Hospitalizations (Proportion)
+
+```{r}
+viz(df, c('CA', 'TX', 'LA County', 'Dallas County'), "daily_total_hospitalizations", T, T)
+```
+
+Row
+----
+
+### Daily Deaths (Frequency)
+
+```{r}
+viz(df, c('CA', 'TX', 'LA County', 'Dallas County'), "daily_deaths", T, F)
+```
+
+### Daily Deaths (Proportion)
+
+```{r}
+viz(df, c('CA', 'TX', 'LA County', 'Dallas County'), "daily_deaths", T, T)
+```
+
+Thailand 
+====
+
+Row
+----
+
+### Daily Hospitalizations (Frequency)
+
+```{r}
+viz(df, c('Thailand'), "daily_total_hospitalizations", T, F)
+```
+
+### Daily Hospitalizations (Proportion)
+
+```{r}
+viz(df, c('Thailand'), "daily_total_hospitalizations", T, T)
+```
+
+Row
+----
+
+### Daily Deaths (Frequency)
+
+```{r}
+viz(df, c('Thailand'), "daily_deaths", T, F)
+```
+
+### Daily Deaths (Proportion)
+
+```{r}
+viz(df, c('Thailand'), "daily_deaths", T, T)
+```
+
+Guatemala
+====
+
+Row
+----
+
+### Daily Hospitalizations (Frequency)
+
+```{r}
+viz(df, c('Guatemala'), "daily_total_hospitalizations", T, F)
+```
+
+### Daily Hospitalizations (Proportion)
+
+```{r}
+viz(df, c('Guatemala'), "daily_total_hospitalizations", T, T)
+```
+
+Row
+----
+
+### Daily Deaths (Frequency)
+
+```{r}
+viz(df, c('Guatemala'), "daily_deaths", T, F)
+```
+
+### Daily Deaths (Proportion)
+
+```{r}
+viz(df, c('Guatemala'), "daily_deaths", T, T)
+```
