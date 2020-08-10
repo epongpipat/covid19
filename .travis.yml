@@ -1,5 +1,4 @@
 language: r
 
 script:
-  - Rscript --vanilla scripts/create_data.R
-  - Rscript --vanilla scripts/render_rmd.R
+  - R -e 'rmarkdown::render("scripts/scripts/covid19.Rmd", "docs/index.html")
