@@ -8,4 +8,5 @@ License: MIT
 URL: https://github.com/epongpipat/covid19
 BugReports: https://github.com/epongpipat/covid19/issues
 Imports:
-  xfun
+  xfun,
+  flexdashboard
