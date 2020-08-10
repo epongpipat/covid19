@@ -1,0 +1,9 @@
+Title: COVID19 Data Vizualizations for Family
+Version: 0.1
+Authors@R: person("Ekarin", "Pongpipat",
+                  role = c("aut", "cre"))
+Description: COVID19 Data Vizualizations for Family
+Depends: R (>= 3.1.0)
+License: MIT
+URL: https://github.com/epongpipat/covid19
+BugReports: https://github.com/epongpipat/covid19/issues
